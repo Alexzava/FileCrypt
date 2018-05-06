@@ -26,7 +26,7 @@ public class CryptoAES {
 
     private static int IV_LENGTH = 12;
 	
-    private static int SALT_LENGTH = 16;
+    private static int SALT_LENGTH = 64;
     private static int PBKDF2_ITERATIONS = 50000;
     private static int KEY_LENGTH = 256;
 
