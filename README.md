@@ -61,7 +61,7 @@ EK = PBKDF2(password, Salt, 50000, 256)
 
 ## Built With
 
-* [Bouncy Caslte](https://bouncycastle.org/) - Java implementation of cryptographic algorithms.
+* [Bouncy Castle](https://bouncycastle.org/) - Java implementation of cryptographic algorithms.
 
 ## Authors
 
