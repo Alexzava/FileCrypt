@@ -51,7 +51,7 @@ Class-Path: lib/<THE_NEW_FILE.jar>
 
 ## How it works
 
-* Generate 64 secure random bytes as **Salt**
+* Generate 16 secure random bytes as **Salt**
 * Generate 12 secure random bytes as **IV**
 * Generate **Encryption Key** (EK) with PBKDF2
 ```
