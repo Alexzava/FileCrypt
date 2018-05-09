@@ -24,7 +24,7 @@ public class Main {
 
         if(!args[0].equals("encrypt") && !args[0].equals("decrypt"))
         {
-            System.out.println("Invalid input");
+            System.out.println("Invalid input.");
             return ;
         }
 
@@ -33,7 +33,10 @@ public class Main {
 
         File file = new File(filename);
         if(!file.exists())
-            System.out.println("Invalid file.");
+		{
+			System.out.println("Invalid file.");
+			return ;
+		}
 
         System.out.println("Password: ");
         password = console.readPassword();
