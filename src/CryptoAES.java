@@ -1,6 +1,6 @@
 /*
  *
- *  FileCrypt made by alexzava
+ *  FileCrypt
  *
  *  Github: https://github.com/alexzava/filecrypt
  *
@@ -21,17 +21,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Arrays;
 
 public class CryptoAES {
 
     private static int IV_LENGTH = 12;
-	
     private static int SALT_LENGTH = 64;
+
     private static int PBKDF2_ITERATIONS = 50000;
     private static int KEY_LENGTH = 256;
 
     //Encrypt
-    public static void Encrypt(String filename, String password) {
+    public static void Encrypt(String filename, char[] password) {
         Security.addProvider(new BouncyCastleProvider());
         try {
 
@@ -54,7 +55,7 @@ public class CryptoAES {
             SecretKeySpec secretKeySpec = new SecretKeySpec(encryptionKey, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(IV));
 
-            //Read the file and encrypt
+            //Read the file and Encrypt
             FileInputStream plainFile = new FileInputStream(filename);
             FileOutputStream encFile = new FileOutputStream(filename + ".enc");
             CipherOutputStream cipherOutputStream = new CipherOutputStream(encFile, cipher);
@@ -88,7 +89,7 @@ public class CryptoAES {
     }
 
     //Decrypt
-    public static void Decrypt(String filename, String password) {
+    public static void Decrypt(String filename, char[] password) {
         Security.addProvider(new BouncyCastleProvider());
         try {
 
@@ -117,7 +118,7 @@ public class CryptoAES {
             SecretKeySpec secretKeySpec = new SecretKeySpec(encryptionKey, "AES");
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(IV));
 
-            //Read the file and decrypt
+            //Read the file and Decrypt
             CipherInputStream cipherInputStream = new CipherInputStream(encFile, cipher);
             cipherInputStream.skip(SALT_LENGTH + IV_LENGTH);
             byte[] buffer = new byte[8192];
@@ -146,11 +147,12 @@ public class CryptoAES {
     }
 
     //Generate a PBKDF2 hash
-    private static byte[] PBKDF2(String password, byte[] salt) {
+    private static byte[] PBKDF2(char[] password, byte[] salt) {
         try {
             SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, PBKDF2_ITERATIONS, KEY_LENGTH);
+            PBEKeySpec spec = new PBEKeySpec(password, salt, PBKDF2_ITERATIONS, KEY_LENGTH);
             SecretKey secretKey = secretKeyFactory.generateSecret(spec);
+
             return secretKey.getEncoded();
         }
         catch(Exception error)

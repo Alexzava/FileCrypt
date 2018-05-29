@@ -1,6 +1,6 @@
 /*
  *
- *  FileCrypt made by alexzava
+ *  FileCrypt
  *
  *  Github: https://github.com/alexzava/filecrypt
  *
@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("\nFile Crypt (1.0) - Alexzava\n");
+        System.out.println("\nFile Crypt (1.1) - Alexzava\n");
 
         String op, filename;
         char[] password;
@@ -25,7 +25,7 @@ public class Main {
         if(!args[0].equals("encrypt") && !args[0].equals("decrypt"))
         {
             System.out.println("Invalid input.");
-            return ;
+            System.exit(1);
         }
 
         op = args[0];
@@ -33,15 +33,15 @@ public class Main {
 
         File file = new File(filename);
         if(!file.exists())
-		{
-			System.out.println("Invalid file.");
-			return ;
-		}
+        {
+            System.out.println("Invalid file.");
+            System.exit(1);
+        }
 
         System.out.println("Password: ");
         password = console.readPassword();
 
-        if(op.equals("encrypt"))
+        if(op.equals("encrypt")) //Encrypt
         {
             System.out.println("Retype password: ");
             char[] rePassword = console.readPassword();
@@ -49,22 +49,48 @@ public class Main {
             if(!Arrays.equals(password, rePassword))
             {
                 System.out.println("The passwords are different.");
-                return ;
+                System.exit(1);
             }
-
+			
             if(password.length < 10)
             {
                 System.out.println("WARNING! The password is short. A password of at least 10 characters is recommended.\nAre you sure you want to continue? (Y/N)");
                 String resp = console.readLine();
                 if(!resp.contains("y") && !resp.contains("Y"))
-                    return ;
+                    System.exit(1);
             }
 
-            CryptoAES.Encrypt(filename, new String(password));
+            if(file.isDirectory())
+            {
+                File[] dirContent = file.listFiles();
+                for(File f : dirContent)
+                {
+                    if(f.isFile() && !f.getName().contains(".enc"))
+                    {
+                        System.out.println("\nFile: " + f.getName());
+                        CryptoAES.Encrypt(f.getAbsolutePath(), password);
+                    }
+                }
+            }
+            else
+                CryptoAES.Encrypt(filename, password);
         }
-        else if(op.equals("decrypt"))
+        else if(op.equals("decrypt")) //Decrypt
         {
-            CryptoAES.Decrypt(filename, new String(password));
+            if(file.isDirectory())
+            {
+                File[] dirContent = file.listFiles();
+                for (File f : dirContent)
+                {
+                    if (f.isFile() && f.getName().contains(".enc"))
+                    {
+                        System.out.println("\nFile: " + f.getName());
+                        CryptoAES.Decrypt(f.getAbsolutePath(), password);
+                    }
+                }
+            }
+            else
+                CryptoAES.Decrypt(filename, password);
         }
     }
 }

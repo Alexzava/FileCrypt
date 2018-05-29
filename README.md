@@ -8,12 +8,22 @@ Simple software to encrypt files with AES-256.
 
 **Encryption**
 ```
+//File
 java -jar FileCrypt.jar encrypt <filename>
+
+//All files in a directory
+java -jar FileCrypt.jar encrypt <directory>
+
 ```
 
 **Decryption**
 ```
+//File
 java -jar FileCrypt.jar decrypt <filename>
+
+//All files in a directory
+java -jar FileCrypt.jar decrypt <directory>
+
 ```
 
 ## How to build
@@ -58,6 +68,8 @@ Class-Path: lib/<THE_NEW_FILE.jar>
 EK = PBKDF2(password, Salt, 50000, 256)
 ```
 * Encrypt/Decrypt with **AES/GCM/NoPadding**
+
+* During directory encryption a new **Salt**, **IV** and **EK** are generated for each file.
 
 ## Built With
 
